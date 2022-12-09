@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # site-recovery
 
 Azure Site Recovery
@@ -90,10 +91,24 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+<<<<<<< HEAD
+=======
+=======
+# Azure Resource Group
+[![Changelog](https://img.shields.io/badge/changelog-release-green.svg)](CHANGELOG.md) [![Notice](https://img.shields.io/badge/notice-copyright-yellow.svg)](NOTICE) [![Apache V2 License](https://img.shields.io/badge/license-Apache%20V2-orange.svg)](LICENSE) [![TF Registry](https://img.shields.io/badge/terraform-registry-blue.svg)](https://registry.terraform.io/modules/claranet/azure-site-recovery/azurerm/)
+
+Common Azure terraform module to create an Azure Site Recovery configuration.
+
+## Naming
+
+Resource naming is based on the [Microsoft CAF naming convention best practices](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming). Legacy naming is available by setting the parameter `use_caf_naming` to false.
+We rely on [the official Terraform Azure CAF naming provider](https://registry.terraform.io/providers/aztfmod/azurecaf/latest/docs/resources/azurecaf_name) to generate resource names.
+>>>>>>> 3c24476 (AZ-935: Init module)
 
 <!-- BEGIN_TF_DOCS -->
 ## Providers
 
+<<<<<<< HEAD
 No providers.
 
 ## Modules
@@ -107,8 +122,72 @@ No resources.
 ## Inputs
 
 No inputs.
+=======
+| Name | Version |
+|------|---------|
+| azurecaf | ~> 1.1 |
+| azurerm | ~> 3.0 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| cache-storage-account | claranet/storage-account/azurerm | 7.3.0 |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [azurerm_recovery_services_vault.asr_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/recovery_services_vault) | resource |
+| [azurerm_site_recovery_fabric.primary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_fabric) | resource |
+| [azurerm_site_recovery_fabric.secondary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_fabric) | resource |
+| [azurerm_site_recovery_network_mapping.network-mapping](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_network_mapping) | resource |
+| [azurerm_site_recovery_protection_container.primary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_protection_container) | resource |
+| [azurerm_site_recovery_protection_container.secondary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_protection_container) | resource |
+| [azurerm_site_recovery_protection_container_mapping.container-mapping](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_protection_container_mapping) | resource |
+| [azurerm_site_recovery_replicated_vm.vm-replication](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_replicated_vm) | resource |
+| [azurerm_site_recovery_replication_policy.policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_replication_policy) | resource |
+| [azurecaf_name.primary_srf](https://registry.terraform.io/providers/aztfmod/azurecaf/latest/docs/data-sources/name) | data source |
+| [azurecaf_name.primary_srpc](https://registry.terraform.io/providers/aztfmod/azurecaf/latest/docs/data-sources/name) | data source |
+| [azurecaf_name.rsv](https://registry.terraform.io/providers/aztfmod/azurecaf/latest/docs/data-sources/name) | data source |
+| [azurecaf_name.secondary_srf](https://registry.terraform.io/providers/aztfmod/azurecaf/latest/docs/data-sources/name) | data source |
+| [azurecaf_name.secondary_srpc](https://registry.terraform.io/providers/aztfmod/azurecaf/latest/docs/data-sources/name) | data source |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| cache\_storage\_resource\_group\_name | Resource Group name in which to deploy the cache Storage Account. | `string` | n/a | yes |
+| client\_name | Client name/account used in naming. | `string` | n/a | yes |
+| default\_tags\_enabled | Option to enable or disable default tags. | `bool` | `true` | no |
+| environment | Project environment. | `string` | n/a | yes |
+| extra\_tags | Additional tags to associate with your Azure Storage Account. | `map(string)` | `{}` | no |
+| location | Azure region to use. | `string` | n/a | yes |
+| name\_prefix | Optional prefix for the generated name. | `string` | `""` | no |
+| name\_suffix | Optional suffix for the generated name. | `string` | `""` | no |
+| network\_mapping | Map of VNET mapping. Source = Destination. | `map(string)` | `{}` | no |
+| primary\_location | Location of source resources to be replicated. | `string` | n/a | yes |
+| primary\_location\_short | Short name of the source location. | `any` | n/a | yes |
+| primary\_site\_recovery\_fabric\_custom\_name | Custom name for Primary Azure Site Recovery Fabric. | `string` | `""` | no |
+| primary\_site\_recovery\_protection\_container | Custom name for Primary Azure Site Recovery Protection Container. | `string` | `""` | no |
+| recovery\_vault\_custom\_name | Custom name for Azure Recovery Vault. | `string` | `""` | no |
+| replicated\_vms | Map of VMs to replicate with Azure Site Recovery. | <pre>object({<br>    vm_id                      = string<br>    target_resource_group_id   = string<br>    target_availability_set_id = optional(string, null)<br>    target_zone                = optional(number, null)<br>    target_network_id          = string<br><br>    managed_disks = list(object({<br>      disk_id   = string<br>      disk_type = string<br>    }))<br><br>    network_interfaces = list(object({<br>      network_interface_id          = string<br>      target_subnet_name            = string<br>      target_static_ip              = optional(string, null)<br>      recovery_public_ip_address_id = optional(string, null)<br>    }))<br>  })</pre> | n/a | yes |
+| replication\_policy | Site recovery replication policy. | <pre>object({<br>    name                                                 = string<br>    recovery_point_retention_in_minutes                  = optional(number, 1440) # 24h<br>    application_consistent_snapshot_frequency_in_minutes = optional(number, 240)  # 4h<br>  })</pre> | n/a | yes |
+| resource\_group\_name | Resource group name | `string` | n/a | yes |
+| secondary\_site\_recovery\_fabric\_custom\_name | Custom name for Secondary Azure Site Recovery Fabric. | `string` | `""` | no |
+| secondary\_site\_recovery\_protection\_container | Custom name for Secondary Azure Site Recovery Protection Container. | `string` | `""` | no |
+| stack | Project stack name. | `string` | n/a | yes |
+| use\_caf\_naming | Use the Azure CAF naming provider to generate default resource name. `custom_rg_name` override this if set. Legacy default name is used if this is set to `false`. | `bool` | `true` | no |
+>>>>>>> 3c24476 (AZ-935: Init module)
 
 ## Outputs
 
 No outputs.
 <!-- END_TF_DOCS -->
+<<<<<<< HEAD
+=======
+## Related documentation
+
+Azure Site Recovery documentation: [learn.microsoft.com/en-us/azure/site-recovery/site-recovery-overview](https://learn.microsoft.com/en-us/azure/site-recovery/site-recovery-overview)
+>>>>>>> a8213ec (AZ-935: Init module)
+>>>>>>> 3c24476 (AZ-935: Init module)
