@@ -45,25 +45,26 @@ variable "cache_storage_resource_group_name" {
 
 variable "replicated_vms" {
   description = "Map of VMs to replicate with Azure Site Recovery."
-  type = object({
-    vm_id                      = string
-    target_resource_group_id   = string
-    target_availability_set_id = optional(string, null)
-    target_zone                = optional(number, null)
-    target_network_id          = string
+  type = map(
+    object({
+      vm_id                      = string
+      target_resource_group_id   = string
+      target_availability_set_id = optional(string, null)
+      target_zone                = optional(number, null)
+      target_network_id          = string
 
-    managed_disks = list(object({
-      disk_id   = string
-      disk_type = string
-    }))
+      managed_disks = list(object({
+        disk_id   = string
+        disk_type = string
+      }))
 
-    network_interfaces = list(object({
-      network_interface_id          = string
-      target_subnet_name            = string
-      target_static_ip              = optional(string, null)
-      recovery_public_ip_address_id = optional(string, null)
-    }))
-  })
+      network_interfaces = list(object({
+        network_interface_id          = string
+        target_subnet_name            = string
+        target_static_ip              = optional(string, null)
+        recovery_public_ip_address_id = optional(string, null)
+      }))
+  }))
 }
 
 variable "replication_policy" {

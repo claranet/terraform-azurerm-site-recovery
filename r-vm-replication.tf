@@ -10,15 +10,15 @@ resource "azurerm_site_recovery_replicated_vm" "vm-replication" {
   source_recovery_protection_container_name = azurerm_site_recovery_protection_container.primary.name
   source_vm_id                              = each.value.vm_id
 
-  target_recovery_fabric_id               = azurerm_site_recovery_fabric.secondary.name
-  target_recovery_protection_container_id = azurerm_site_recovery_protection_container.secondary.name
+  target_recovery_fabric_id               = azurerm_site_recovery_fabric.secondary.id
+  target_recovery_protection_container_id = azurerm_site_recovery_protection_container.secondary.id
   target_resource_group_id                = each.value.target_resource_group_id
   target_availability_set_id              = each.value.target_availability_set_id
   target_zone                             = each.value.target_zone
   target_network_id                       = each.value.target_network_id
 
   dynamic "managed_disk" {
-    for_each = each.value.managed_disks
+    for_each = toset(each.value.managed_disks)
     content {
       disk_id                    = managed_disk.value.disk_id
       staging_storage_account_id = module.cache-storage-account.storage_account_id
@@ -29,7 +29,7 @@ resource "azurerm_site_recovery_replicated_vm" "vm-replication" {
   }
 
   dynamic "network_interface" {
-    for_each = each.value.network_interfaces
+    for_each = toset(each.value.network_interfaces)
     content {
       source_network_interface_id   = network_interface.value.network_interface_id
       target_subnet_name            = network_interface.value.target_subnet_name
