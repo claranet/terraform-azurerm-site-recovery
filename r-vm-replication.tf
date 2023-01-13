@@ -1,7 +1,7 @@
-resource "azurerm_site_recovery_replicated_vm" "vm-replication" {
+resource "azurerm_site_recovery_replicated_vm" "vm_replication" {
   for_each = var.replicated_vms
 
-  name                           = format("%s-replication", each.value.vm_id)
+  name                           = each.key
   recovery_replication_policy_id = azurerm_site_recovery_replication_policy.policy.id
   recovery_vault_name            = azurerm_recovery_services_vault.asr_vault.name
   resource_group_name            = var.resource_group_name
@@ -21,7 +21,7 @@ resource "azurerm_site_recovery_replicated_vm" "vm-replication" {
     for_each = toset(each.value.managed_disks)
     content {
       disk_id                    = managed_disk.value.disk_id
-      staging_storage_account_id = module.cache-storage-account.storage_account_id
+      staging_storage_account_id = module.cache_storage_account.storage_account_id
       target_resource_group_id   = each.value.target_resource_group_id
       target_disk_type           = managed_disk.value.disk_type
       target_replica_disk_type   = managed_disk.value.disk_type
@@ -40,7 +40,7 @@ resource "azurerm_site_recovery_replicated_vm" "vm-replication" {
   }
 
   depends_on = [
-    azurerm_site_recovery_network_mapping.network-mapping,
+    azurerm_site_recovery_network_mapping.network_mapping,
     azurerm_site_recovery_replication_policy.policy
   ]
 

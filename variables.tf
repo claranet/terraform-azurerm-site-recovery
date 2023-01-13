@@ -30,6 +30,7 @@ variable "primary_location" {
 
 variable "primary_location_short" {
   description = "Short name of the source location."
+  type        = string
 }
 
 variable "network_mapping" {
@@ -41,6 +42,24 @@ variable "network_mapping" {
 variable "cache_storage_resource_group_name" {
   description = "Resource Group name in which to deploy the cache Storage Account."
   type        = string
+}
+
+variable "cache_storage_allowed_subnet_ids" {
+  description = "List of subnet ids allowed to access to the cache storage. All subnets of replicated VMs must be part of this list."
+  type        = list(string)
+  default     = null
+}
+
+variable "cache_storage_allowed_cidrs" {
+  description = "List of public IPs allowed to access to the cache storage account."
+  type        = list(string)
+  default     = []
+}
+
+variable "cache_storage_advanced_threat_protection_enabled" {
+  description = "Boolean flag which controls if advanced threat protection is enabled, see [documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-advanced-threat-protection?tabs=azure-portal) for more information."
+  type        = bool
+  default     = true
 }
 
 variable "replicated_vms" {

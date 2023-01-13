@@ -43,3 +43,9 @@ variable "use_caf_naming" {
   type        = bool
   default     = true
 }
+
+variable "cache_storage_custom_name" {
+  description = "Custom name for cache Storage Account."
+  type        = string
+  default     = null
+}

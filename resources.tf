@@ -35,7 +35,7 @@ resource "azurerm_site_recovery_protection_container" "secondary" {
   resource_group_name  = var.resource_group_name
 }
 
-resource "azurerm_site_recovery_network_mapping" "network-mapping" {
+resource "azurerm_site_recovery_network_mapping" "network_mapping" {
   for_each                    = var.network_mapping
   name                        = format("asr-netmapping-%s-to-%s", reverse(split("/", each.key))[0], reverse(split("/", each.value))[0])
   recovery_vault_name         = azurerm_recovery_services_vault.asr_vault.name
@@ -46,7 +46,7 @@ resource "azurerm_site_recovery_network_mapping" "network-mapping" {
   target_recovery_fabric_name = azurerm_site_recovery_fabric.secondary.name
 }
 
-resource "azurerm_site_recovery_protection_container_mapping" "container-mapping" {
+resource "azurerm_site_recovery_protection_container_mapping" "container_mapping" {
   name                                      = "container-mapping"
   resource_group_name                       = var.resource_group_name
   recovery_vault_name                       = azurerm_recovery_services_vault.asr_vault.name
