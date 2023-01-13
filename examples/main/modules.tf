@@ -3,7 +3,7 @@ module "rg" {
   version = "x.x.x"
 
   client_name = var.client_name
-  location    = var.client_name
+  location    = var.location
   environment = var.environment
   stack       = var.stack
 }
@@ -61,7 +61,7 @@ data "azapi_resource" "vms_infos" {
   response_export_values = ["name", "id", "properties.storageProfile.osDisk.managedDisk", "properties.storageProfile.dataDisks", "properties.networkProfile.networkInterfaces"]
 }
 
-module "site-recovery" {
+module "site_recovery" {
   source  = "claranet/site-recovery/azurerm"
   version = "x.x.x"
 
