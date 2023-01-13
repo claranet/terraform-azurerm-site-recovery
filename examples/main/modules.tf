@@ -2,10 +2,10 @@ module "rg" {
   source  = "claranet/rg/azurerm"
   version = "x.x.x"
 
-  client_name = module.common.client_name
-  location    = module.common.location
-  environment = local.environment
-  stack       = local.stack
+  client_name = var.client_name
+  location    = var.client_name
+  environment = var.environment
+  stack       = var.stack
 }
 
 module "primary_location" {
@@ -55,7 +55,7 @@ module "subnet" {
 
 data "azapi_resource" "vms_infos" {
   name      = "vm01"
-  parent_id = "vm01_primary_location_resource_group_id"
+  parent_id = "/subscriptions/xxxx-yyyyyy-aaaaaa-zzzzzzz-tttttttt/resourceGroups/rg-primary-region-vm01"
   type      = "Microsoft.Compute/virtualMachines@2022-08-01"
 
   response_export_values = ["name", "id", "properties.storageProfile.osDisk.managedDisk", "properties.storageProfile.dataDisks", "properties.networkProfile.networkInterfaces"]
@@ -65,9 +65,9 @@ module "site-recovery" {
   source  = "claranet/site-recovery/azurerm"
   version = "x.x.x"
 
-  client_name = local.client_name
-  environment = local.environment
-  stack       = local.stack
+  client_name = var.client_name
+  environment = var.environment
+  stack       = var.stack
 
   location            = module.secondary_location.location
   resource_group_name = module.rg.resource_group_name
@@ -79,25 +79,24 @@ module "site-recovery" {
 
   replicated_vms = {
     vm01 = {
-      vm_id                    = jsondecode(data.azapi_resource.vms_infos["vm01"].output).id
-      target_resource_group_id = module.rg.resourcegroup_name
+      vm_id                    = jsondecode(data.azapi_resource.vms_infos.output).id
+      target_resource_group_id = module.rg.resource_group_name
       target_network_id        = module.subnet.subnet_id
 
       managed_disks = [
         {
-          disk_id   = jsondecode(data.azapi_resource.vms_infos["vm01"].output).properties.storageProfile.osDisk.managedDisk.id
-          disk_type = jsondecode(data.azapi_resource.vms_infos["vm01"].output).properties.storageProfile.osDisk.managedDisk.storageAccountType
+          disk_id   = jsondecode(data.azapi_resource.vms_infos.output).properties.storageProfile.osDisk.managedDisk.id
+          disk_type = jsondecode(data.azapi_resource.vms_infos.output).properties.storageProfile.osDisk.managedDisk.storageAccountType
         }
       ]
       network_interfaces = [
         {
-          network_interface_id = jsondecode(data.azapi_resource.vms_infos["vm01"].output).properties.networkProfile.networkInterfaces[0].id
+          network_interface_id = jsondecode(data.azapi_resource.vms_infos.output).properties.networkProfile.networkInterfaces[0].id
           target_subnet_name   = module.subnet.subnet_id
           target_static_ip     = "172.16.2.10"
         }
       ]
     }
-
   }
 
 
