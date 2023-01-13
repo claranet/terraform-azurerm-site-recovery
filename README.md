@@ -106,6 +106,134 @@ We rely on [the official Terraform Azure CAF naming provider](https://registry.t
 >>>>>>> 3c24476 (AZ-935: Init module)
 
 <!-- BEGIN_TF_DOCS -->
+## Global versioning rule for Claranet Azure modules
+
+| Module version | Terraform version | AzureRM version |
+| -------------- | ----------------- | --------------- |
+| >= 7.x.x       | 1.3.x             | >= 3.0          |
+| >= 6.x.x       | 1.x               | >= 3.0          |
+| >= 5.x.x       | 0.15.x            | >= 2.0          |
+| >= 4.x.x       | 0.13.x / 0.14.x   | >= 2.0          |
+| >= 3.x.x       | 0.12.x            | >= 2.0          |
+| >= 2.x.x       | 0.12.x            | < 2.0           |
+| <  2.x.x       | 0.11.x            | < 2.0           |
+
+## Usage
+
+This module is optimized to work with the [Claranet terraform-wrapper](https://github.com/claranet/terraform-wrapper) tool
+which set some terraform variables in the environment needed by this module.
+More details about variables set by the `terraform-wrapper` available in the [documentation](https://github.com/claranet/terraform-wrapper#environment).
+
+```hcl
+module "rg" {
+  source  = "claranet/rg/azurerm"
+  version = "x.x.x"
+
+  client_name = module.common.client_name
+  location    = module.common.location
+  environment = local.environment
+  stack       = local.stack
+}
+
+module "primary_location" {
+  source  = "claranet/regions/azurerm"
+  version = "x.x.x"
+
+  azure_region = "fr-central"
+}
+
+module "secondary_location" {
+  source  = "claranet/regions/azurerm"
+  version = "x.x.x"
+
+  azure_region = "fr-south"
+}
+
+module "vnet" {
+  source  = "claranet/vnet/azurerm"
+  version = "x.x.x"
+
+  client_name = var.client_name
+  environment = var.environment
+  stack       = var.stack
+
+  resource_group_name = module.rg.resource_group_name
+
+  location       = module.secondary_location.location
+  location_short = module.secondary_location.location_short
+
+  vnet_cidr = ["172.16.2.0/24"]
+}
+
+module "subnet" {
+  source  = "claranet/subnet/azurerm"
+  version = "x.x.x"
+
+  client_name = var.client_name
+  environment = var.environment
+  stack       = var.stack
+
+  resource_group_name = module.rg.resource_group_name
+  location_short      = module.secondary_location.location_short
+
+  virtual_network_name = module.vnet.virtual_network_name
+  subnet_cidr_list     = ["172.16.2.0/24"]
+}
+
+data "azapi_resource" "vms_infos" {
+  name      = "vm01"
+  parent_id = "vm01_primary_location_resource_group_id"
+  type      = "Microsoft.Compute/virtualMachines@2022-08-01"
+
+  response_export_values = ["name", "id", "properties.storageProfile.osDisk.managedDisk", "properties.storageProfile.dataDisks", "properties.networkProfile.networkInterfaces"]
+}
+
+module "site-recovery" {
+  source  = "claranet/site-recovery/azurerm"
+  version = "x.x.x"
+
+  client_name = local.client_name
+  environment = local.environment
+  stack       = local.stack
+
+  location            = module.secondary_location.location
+  resource_group_name = module.rg.resource_group_name
+
+  primary_location       = module.primary_location.location
+  primary_location_short = module.primary_location.location_short
+
+  cache_storage_resource_group_name = "rg-cache-storage"
+
+  replicated_vms = {
+    vm01 = {
+      vm_id                    = jsondecode(data.azapi_resource.vms_infos["vm01"].output).id
+      target_resource_group_id = module.rg.resourcegroup_name
+      target_network_id        = module.subnet.subnet_id
+
+      managed_disks = [
+        {
+          disk_id   = jsondecode(data.azapi_resource.vms_infos["vm01"].output).properties.storageProfile.osDisk.managedDisk.id
+          disk_type = jsondecode(data.azapi_resource.vms_infos["vm01"].output).properties.storageProfile.osDisk.managedDisk.storageAccountType
+        }
+      ]
+      network_interfaces = [
+        {
+          network_interface_id = jsondecode(data.azapi_resource.vms_infos["vm01"].output).properties.networkProfile.networkInterfaces[0].id
+          target_subnet_name   = module.subnet.subnet_id
+          target_static_ip     = "172.16.2.10"
+        }
+      ]
+    }
+
+  }
+
+
+  replication_policy = {
+    name = "replipol-01"
+  }
+}
+```
+
 ## Providers
 
 <<<<<<< HEAD
@@ -132,7 +260,7 @@ No inputs.
 
 | Name | Source | Version |
 |------|--------|---------|
-| cache-storage-account | claranet/storage-account/azurerm | 7.3.0 |
+| cache\_storage\_account | claranet/storage-account/azurerm | 7.3.0 |
 
 ## Resources
 
@@ -141,11 +269,11 @@ No inputs.
 | [azurerm_recovery_services_vault.asr_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/recovery_services_vault) | resource |
 | [azurerm_site_recovery_fabric.primary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_fabric) | resource |
 | [azurerm_site_recovery_fabric.secondary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_fabric) | resource |
-| [azurerm_site_recovery_network_mapping.network-mapping](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_network_mapping) | resource |
+| [azurerm_site_recovery_network_mapping.network_mapping](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_network_mapping) | resource |
 | [azurerm_site_recovery_protection_container.primary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_protection_container) | resource |
 | [azurerm_site_recovery_protection_container.secondary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_protection_container) | resource |
-| [azurerm_site_recovery_protection_container_mapping.container-mapping](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_protection_container_mapping) | resource |
-| [azurerm_site_recovery_replicated_vm.vm-replication](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_replicated_vm) | resource |
+| [azurerm_site_recovery_protection_container_mapping.container_mapping](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_protection_container_mapping) | resource |
+| [azurerm_site_recovery_replicated_vm.vm_replication](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_replicated_vm) | resource |
 | [azurerm_site_recovery_replication_policy.policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_replication_policy) | resource |
 | [azurecaf_name.primary_srf](https://registry.terraform.io/providers/aztfmod/azurecaf/latest/docs/data-sources/name) | data source |
 | [azurecaf_name.primary_srpc](https://registry.terraform.io/providers/aztfmod/azurecaf/latest/docs/data-sources/name) | data source |
@@ -171,7 +299,7 @@ No inputs.
 | name\_suffix | Optional suffix for the generated name. | `string` | `""` | no |
 | network\_mapping | Map of VNET mapping. Source = Destination. | `map(string)` | `{}` | no |
 | primary\_location | Location of source resources to be replicated. | `string` | n/a | yes |
-| primary\_location\_short | Short name of the source location. | `any` | n/a | yes |
+| primary\_location\_short | Short name of the source location. | `string` | n/a | yes |
 | primary\_site\_recovery\_fabric\_custom\_name | Custom name for Primary Azure Site Recovery Fabric. | `string` | `""` | no |
 | primary\_site\_recovery\_protection\_container | Custom name for Primary Azure Site Recovery Protection Container. | `string` | `""` | no |
 | recovery\_vault\_custom\_name | Custom name for Azure Recovery Vault. | `string` | `""` | no |
