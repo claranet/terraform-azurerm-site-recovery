@@ -27,12 +27,12 @@ variable "secondary_site_recovery_fabric_custom_name" {
   default     = ""
 }
 
-variable "primary_site_recovery_protection_container" {
+variable "primary_site_recovery_protection_container_custom_name" {
   description = "Custom name for Primary Azure Site Recovery Protection Container."
   type        = string
   default     = ""
 }
-variable "secondary_site_recovery_protection_container" {
+variable "secondary_site_recovery_protection_container_custom_name" {
   description = "Custom name for Secondary Azure Site Recovery Protection Container."
   type        = string
   default     = ""
