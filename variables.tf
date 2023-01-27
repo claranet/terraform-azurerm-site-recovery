@@ -34,7 +34,7 @@ variable "primary_location_short" {
 }
 
 variable "network_mapping" {
-  description = "Map of VNET mapping. Source = Destination."
+  description = "Virtual Network mapping as `{ "source Vnet ID" => "destination Vnet ID" }.`
   type        = map(string)
   default     = {}
 }
@@ -45,13 +45,13 @@ variable "cache_storage_resource_group_name" {
 }
 
 variable "cache_storage_allowed_subnet_ids" {
-  description = "List of subnet ids allowed to access to the cache storage. All subnets of replicated VMs must be part of this list."
+  description = "List of subnet IDs allowed to access to the cache Storage Account. All subnets of replicated VMs must be part of this list."
   type        = list(string)
   default     = null
 }
 
 variable "cache_storage_allowed_cidrs" {
-  description = "List of public IPs allowed to access to the cache storage account."
+  description = "List of public IPs allowed to access to the cache Storage Account."
   type        = list(string)
   default     = []
 }
