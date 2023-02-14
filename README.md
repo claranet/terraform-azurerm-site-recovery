@@ -262,7 +262,7 @@ No inputs.
 
 | Name | Source | Version |
 |------|--------|---------|
-| cache\_storage\_account | claranet/storage-account/azurerm | 7.3.0 |
+| cache\_storage\_account | claranet/storage-account/azurerm | ~> 7.3.0 |
 
 ## Resources
 
@@ -288,8 +288,8 @@ No inputs.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | cache\_storage\_advanced\_threat\_protection\_enabled | Boolean flag which controls if advanced threat protection is enabled, see [documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-advanced-threat-protection?tabs=azure-portal) for more information. | `bool` | `true` | no |
-| cache\_storage\_allowed\_cidrs | List of public IPs allowed to access to the cache storage account. | `list(string)` | `[]` | no |
-| cache\_storage\_allowed\_subnet\_ids | List of subnet ids allowed to access to the cache storage. All subnets of replicated VMs must be part of this list. | `list(string)` | `null` | no |
+| cache\_storage\_allowed\_cidrs | List of public IPs allowed to access to the cache Storage Account. | `list(string)` | `[]` | no |
+| cache\_storage\_allowed\_subnet\_ids | List of subnet IDs allowed to access to the cache Storage Account. All subnets of replicated VMs must be part of this list. | `list(string)` | `null` | no |
 | cache\_storage\_custom\_name | Custom name for cache Storage Account. | `string` | `null` | no |
 | cache\_storage\_resource\_group\_name | Resource Group name in which to deploy the cache Storage Account. | `string` | n/a | yes |
 | client\_name | Client name/account used in naming. | `string` | n/a | yes |
@@ -299,17 +299,17 @@ No inputs.
 | location | Azure region to use. | `string` | n/a | yes |
 | name\_prefix | Optional prefix for the generated name. | `string` | `""` | no |
 | name\_suffix | Optional suffix for the generated name. | `string` | `""` | no |
-| network\_mapping | Map of VNET mapping. Source = Destination. | `map(string)` | `{}` | no |
+| network\_mapping | Virtual Network mapping as `{ "source Vnet ID" => "destination Vnet ID" }.` | `map(string)` | `{}` | no |
 | primary\_location | Location of source resources to be replicated. | `string` | n/a | yes |
 | primary\_location\_short | Short name of the source location. | `string` | n/a | yes |
 | primary\_site\_recovery\_fabric\_custom\_name | Custom name for Primary Azure Site Recovery Fabric. | `string` | `""` | no |
-| primary\_site\_recovery\_protection\_container | Custom name for Primary Azure Site Recovery Protection Container. | `string` | `""` | no |
+| primary\_site\_recovery\_protection\_container\_custom\_name | Custom name for Primary Azure Site Recovery Protection Container. | `string` | `""` | no |
 | recovery\_vault\_custom\_name | Custom name for Azure Recovery Vault. | `string` | `""` | no |
 | replicated\_vms | Map of VMs to replicate with Azure Site Recovery. | <pre>map(<br>    object({<br>      vm_id                      = string<br>      target_resource_group_id   = string<br>      target_availability_set_id = optional(string, null)<br>      target_zone                = optional(number, null)<br>      target_network_id          = string<br><br>      managed_disks = list(object({<br>        disk_id   = string<br>        disk_type = string<br>      }))<br><br>      network_interfaces = list(object({<br>        network_interface_id          = string<br>        target_subnet_name            = string<br>        target_static_ip              = optional(string, null)<br>        recovery_public_ip_address_id = optional(string, null)<br>      }))<br>  }))</pre> | n/a | yes |
 | replication\_policy | Site recovery replication policy. | <pre>object({<br>    name                                                 = string<br>    recovery_point_retention_in_minutes                  = optional(number, 1440) # 24h<br>    application_consistent_snapshot_frequency_in_minutes = optional(number, 240)  # 4h<br>  })</pre> | n/a | yes |
 | resource\_group\_name | Resource group name | `string` | n/a | yes |
 | secondary\_site\_recovery\_fabric\_custom\_name | Custom name for Secondary Azure Site Recovery Fabric. | `string` | `""` | no |
-| secondary\_site\_recovery\_protection\_container | Custom name for Secondary Azure Site Recovery Protection Container. | `string` | `""` | no |
+| secondary\_site\_recovery\_protection\_container\_custom\_name | Custom name for Secondary Azure Site Recovery Protection Container. | `string` | `""` | no |
 | stack | Project stack name. | `string` | n/a | yes |
 | use\_caf\_naming | Use the Azure CAF naming provider to generate default resource name. `custom_rg_name` override this if set. Legacy default name is used if this is set to `false`. | `bool` | `true` | no |
 >>>>>>> 3c24476 (AZ-935: Init module)
