@@ -61,6 +61,34 @@ data "azapi_resource" "vms_infos" {
   response_export_values = ["name", "id", "properties.storageProfile.osDisk.managedDisk", "properties.storageProfile.dataDisks", "properties.networkProfile.networkInterfaces"]
 }
 
+module "run" {
+  source  = "claranet/run/azurerm"
+  version = "x.x.x"
+
+  client_name    = var.client_name
+  location       = module.secondary_location.location
+  location_short = module.secondary_location.location_short
+  environment    = var.environment
+  stack          = var.stack
+
+  resource_group_name = module.rg.resource_group_name
+
+  monitoring_function_splunk_token = "xxxxxx"
+  monitoring_function_metrics_extra_dimensions = {
+    env           = var.environment
+    sfx_monitored = "true"
+  }
+
+  backup_vm_enabled         = true
+  backup_postgresql_enabled = true
+
+  update_center_enabled = true
+
+  extra_tags = {
+    foo = "bar"
+  }
+}
+
 module "site_recovery" {
   source  = "claranet/site-recovery/azurerm"
   version = "x.x.x"
@@ -74,6 +102,11 @@ module "site_recovery" {
 
   primary_location       = module.primary_location.location
   primary_location_short = module.primary_location.location_short
+
+  logs_destinations_ids = [
+    module.run.log_analytics_workspace_id,
+    module.run.logs_storage_account_id
+  ]
 
   cache_storage_resource_group_name = "rg-cache-storage"
 
