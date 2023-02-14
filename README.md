@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # site-recovery
 
 Azure Site Recovery
@@ -98,9 +99,12 @@ If you have run out of energy or time for your project, put a note at the top of
 =======
 >>>>>>> e467562 (AZ-935: Rebase)
 # Azure Resource Group
+=======
+# Azure Site Recovery
+>>>>>>> 223bed4 (AZ-935: Update README)
 [![Changelog](https://img.shields.io/badge/changelog-release-green.svg)](CHANGELOG.md) [![Notice](https://img.shields.io/badge/notice-copyright-yellow.svg)](NOTICE) [![Apache V2 License](https://img.shields.io/badge/license-Apache%20V2-orange.svg)](LICENSE) [![TF Registry](https://img.shields.io/badge/terraform-registry-blue.svg)](https://registry.terraform.io/modules/claranet/site-recovery/azurerm/)
 
-Common Azure terraform module to create an Azure Site Recovery configuration.
+Common Azure terraform module to create an [Azure Site Recovery](https://learn.microsoft.com/en-us/azure/site-recovery/site-recovery-overview) configuration with its cache [Storage Account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-overview).
 
 ## Naming
 
