@@ -253,9 +253,11 @@ module "site_recovery" {
 | Name | Description |
 |------|-------------|
 | cache\_storage\_account | Cache Storage Account. |
+| primary\_fabric | Fabric of the source resources. Primary region. |
 | recovery\_vault | Azure Recovery Services Vault. |
 | replicated\_vms | Replicated virtual machines. |
 | replication\_policy | Replication policy. |
+| secondary\_fabric | Fabric of the replicated resources. Secondary region. |
 <!-- END_TF_DOCS -->
 ## Related documentation
 
