@@ -28,6 +28,7 @@ module "cache_storage_account" {
 
   advanced_threat_protection_enabled = var.cache_storage_advanced_threat_protection_enabled
 
-  subnet_ids    = var.cache_storage_allowed_subnet_ids
+  #  subnet_ids    = var.cache_storage_allowed_subnet_ids
+  subnet_ids    = toset(concat(local.src_subnets, var.cache_storage_allowed_subnet_ids))
   allowed_cidrs = var.cache_storage_allowed_cidrs
 }

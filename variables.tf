@@ -47,7 +47,7 @@ variable "cache_storage_resource_group_name" {
 variable "cache_storage_allowed_subnet_ids" {
   description = "List of subnet IDs allowed to access to the cache Storage Account. All subnets of replicated VMs must be part of this list."
   type        = list(string)
-  default     = null
+  default     = []
 }
 
 variable "cache_storage_allowed_cidrs" {
@@ -63,7 +63,7 @@ variable "cache_storage_advanced_threat_protection_enabled" {
 }
 
 variable "replicated_vms" {
-  description = "Map of VMs to replicate with Azure Site Recovery."
+  description = "Map of VMs to replicate with Azure Site Recovery. VM Name is expected as a key."
   type = map(
     object({
       vm_id                      = string
