@@ -34,7 +34,7 @@ variable "primary_location_short" {
 }
 
 variable "network_mapping" {
-  description = "Virtual Network mapping as `{ \"source Vnet ID\" => \"destination Vnet ID\" }.`"
+  description = "Virtual Network mapping as `{ \"source VNet ID\" => \"destination VNet ID\" }.`"
   type        = map(string)
   default     = {}
 }
