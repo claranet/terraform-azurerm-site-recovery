@@ -45,7 +45,7 @@ variable "cache_storage_resource_group_name" {
 }
 
 variable "cache_storage_allowed_subnet_ids" {
-  description = "List of subnet IDs allowed to access to the cache Storage Account. All subnets of replicated VMs must be part of this list."
+  description = "List of subnet IDs allowed to access to the cache Storage Account. All subnets of replicated VMs are dynamically fetched."
   type        = list(string)
   default     = []
 }

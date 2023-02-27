@@ -222,7 +222,7 @@ module "site_recovery" {
 | cache\_storage\_account\_logs\_retention\_days | Number of days to keep logs on storage account. | `number` | `30` | no |
 | cache\_storage\_advanced\_threat\_protection\_enabled | Boolean flag which controls if advanced threat protection is enabled, see [documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-advanced-threat-protection?tabs=azure-portal) for more information. | `bool` | `true` | no |
 | cache\_storage\_allowed\_cidrs | List of public IPs allowed to access to the cache Storage Account. | `list(string)` | `[]` | no |
-| cache\_storage\_allowed\_subnet\_ids | List of subnet IDs allowed to access to the cache Storage Account. All subnets of replicated VMs must be part of this list. | `list(string)` | `[]` | no |
+| cache\_storage\_allowed\_subnet\_ids | List of subnet IDs allowed to access to the cache Storage Account. All subnets of replicated VMs are dynamically fetched. | `list(string)` | `[]` | no |
 | cache\_storage\_custom\_name | Custom name for cache Storage Account. | `string` | `null` | no |
 | cache\_storage\_resource\_group\_name | Resource Group name in which to deploy the cache Storage Account. | `string` | n/a | yes |
 | client\_name | Client name/account used in naming. | `string` | n/a | yes |
