@@ -182,7 +182,7 @@ module "site_recovery" {
 |------|---------|
 | azapi | ~> 1.0 |
 | azurecaf | ~> 1.1 |
-| azurerm | ~> 3.0 |
+| azurerm | ~> 3.39 |
 
 ## Modules
 
