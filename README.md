@@ -188,7 +188,7 @@ module "site_recovery" {
 
 | Name | Source | Version |
 |------|--------|---------|
-| cache\_storage\_account | claranet/storage-account/azurerm | ~> 7.3.0 |
+| cache\_storage\_account | claranet/storage-account/azurerm | ~> 7.10.0 |
 | diagnostics\_recovery\_vault | claranet/diagnostic-settings/azurerm | ~> 6.4.1 |
 
 ## Resources
@@ -219,7 +219,6 @@ module "site_recovery" {
 | cache\_storage\_account\_logs\_categories | Log categories to send to destinations. | `list(string)` | `null` | no |
 | cache\_storage\_account\_logs\_destinations\_ids | List of destination resources IDs for logs diagnostic destination for the cache Storage Account.<br>Can be `Storage Account`, `Log Analytics Workspace` and `Event Hub`. No more than one of each can be set.<br>If you want to specify an Azure EventHub to send logs and metrics to, you need to provide a formatted string with both the EventHub Namespace authorization send ID and the EventHub name (name of the queue to use in the Namespace) separated by the `|` character. | `list(string)` | `[]` | no |
 | cache\_storage\_account\_logs\_metrics\_categories | Metrics categories to send to destinations. | `list(string)` | `null` | no |
-| cache\_storage\_account\_logs\_retention\_days | Number of days to keep logs on storage account. | `number` | `30` | no |
 | cache\_storage\_advanced\_threat\_protection\_enabled | Boolean flag which controls if advanced threat protection is enabled, see [documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-advanced-threat-protection?tabs=azure-portal) for more information. | `bool` | `true` | no |
 | cache\_storage\_allowed\_cidrs | List of public IPs allowed to access to the cache Storage Account. | `list(string)` | `[]` | no |
 | cache\_storage\_allowed\_subnet\_ids | List of subnet IDs allowed to access to the cache Storage Account. All subnets of replicated VMs are dynamically fetched. | `list(string)` | `[]` | no |

@@ -42,12 +42,6 @@ variable "cache_storage_account_logs_metrics_categories" {
   default     = null
 }
 
-variable "cache_storage_account_logs_retention_days" {
-  type        = number
-  description = "Number of days to keep logs on storage account."
-  default     = 30
-}
-
 variable "cache_storage_account_custom_diagnostic_settings_name" {
   description = "Custom name of the diagnostics settings of the cache storage account, name will be 'default' if not set."
   type        = string

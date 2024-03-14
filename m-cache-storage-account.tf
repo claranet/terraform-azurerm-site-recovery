@@ -1,6 +1,6 @@
 module "cache_storage_account" {
   source  = "claranet/storage-account/azurerm"
-  version = "~> 7.3.0"
+  version = "~> 7.10.0"
 
   client_name = var.client_name
   environment = var.environment
@@ -15,7 +15,6 @@ module "cache_storage_account" {
   logs_destinations_ids           = coalesce(var.cache_storage_account_logs_destinations_ids, var.logs_destinations_ids)
   logs_categories                 = var.cache_storage_account_logs_categories
   logs_metrics_categories         = var.cache_storage_account_logs_metrics_categories
-  logs_retention_days             = var.cache_storage_account_logs_retention_days
   custom_diagnostic_settings_name = var.cache_storage_account_custom_diagnostic_settings_name
 
   account_tier             = "Standard"
