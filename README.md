@@ -180,7 +180,7 @@ module "site_recovery" {
 
 | Name | Version |
 |------|---------|
-| azapi | ~> 1.0 |
+| azapi | ~> 1.0, < 1.13 |
 | azurecaf | ~> 1.1 |
 | azurerm | ~> 3.39 |
 
@@ -204,7 +204,7 @@ module "site_recovery" {
 | [azurerm_site_recovery_protection_container_mapping.container_mapping](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_protection_container_mapping) | resource |
 | [azurerm_site_recovery_replicated_vm.vm_replication](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_replicated_vm) | resource |
 | [azurerm_site_recovery_replication_policy.policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_replication_policy) | resource |
-| [azapi_resource.nic_interfaces](https://registry.terraform.io/providers/Azure/azapi/latest/docs/data-sources/resource) | data source |
+| [azapi_resource.nic_interfaces](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) | data source |
 | [azurecaf_name.primary_srf](https://registry.terraform.io/providers/aztfmod/azurecaf/latest/docs/data-sources/name) | data source |
 | [azurecaf_name.primary_srpc](https://registry.terraform.io/providers/aztfmod/azurecaf/latest/docs/data-sources/name) | data source |
 | [azurecaf_name.rsv](https://registry.terraform.io/providers/aztfmod/azurecaf/latest/docs/data-sources/name) | data source |
