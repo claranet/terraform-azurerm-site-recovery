@@ -1,6 +1,6 @@
 module "cache_storage_account" {
   source  = "claranet/storage-account/azurerm"
-  version = "~> 7.12.0"
+  version = "~> 7.13.0"
 
   client_name = var.client_name
   environment = var.environment

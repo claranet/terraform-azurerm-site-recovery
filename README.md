@@ -182,13 +182,13 @@ module "site_recovery" {
 |------|---------|
 | azapi | ~> 1.0, < 1.13 |
 | azurecaf | ~> 1.1 |
-| azurerm | ~> 3.39 |
+| azurerm | ~> 3.102 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| cache\_storage\_account | claranet/storage-account/azurerm | ~> 7.12.0 |
+| cache\_storage\_account | claranet/storage-account/azurerm | ~> 7.13.0 |
 | diagnostics\_recovery\_vault | claranet/diagnostic-settings/azurerm | ~> 6.5.0 |
 
 ## Resources
