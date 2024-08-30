@@ -1,3 +1,26 @@
+## 7.0.3 (2024-08-30)
+
+### Bug Fixes
+
+* bump `storage-account` to latest version 1c10507
+
+### Miscellaneous Chores
+
+* **deps:** update dependency opentofu to v1.7.3 faf8eca
+* **deps:** update dependency opentofu to v1.8.1 6baf055
+* **deps:** update dependency pre-commit to v3.8.0 4e0cb64
+* **deps:** update dependency tflint to v0.51.2 deb577b
+* **deps:** update dependency tflint to v0.52.0 8b2b058
+* **deps:** update dependency tflint to v0.53.0 df4d9ae
+* **deps:** update dependency trivy to v0.53.0 9c18afd
+* **deps:** update dependency trivy to v0.54.1 8a8facf
+* **deps:** update pre-commit hook alessandrojcm/commitlint-pre-commit-hook to v9.17.0 fdf2cbe
+* **deps:** update pre-commit hook antonbabenko/pre-commit-terraform to v1.92.0 82b7b3f
+* **deps:** update pre-commit hook antonbabenko/pre-commit-terraform to v1.92.1 0d884c0
+* **deps:** update pre-commit hook antonbabenko/pre-commit-terraform to v1.92.2 18aee13
+* **deps:** update pre-commit hook antonbabenko/pre-commit-terraform to v1.94.0 add7948
+* **deps:** update tools b5d2b4b
+
 ## 7.0.2 (2024-06-14)
 
 
