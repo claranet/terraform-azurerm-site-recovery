@@ -189,7 +189,7 @@ module "site_recovery" {
 | Name | Source | Version |
 |------|--------|---------|
 | cache\_storage\_account | claranet/storage-account/azurerm | ~> 7.13.3 |
-| diagnostics\_recovery\_vault | claranet/diagnostic-settings/azurerm | ~> 6.5.0 |
+| diagnostics\_recovery\_vault | claranet/diagnostic-settings/azurerm | ~> 7.0.0 |
 
 ## Resources
 
