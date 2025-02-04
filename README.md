@@ -193,7 +193,7 @@ module "site_recovery" {
 | Name | Source | Version |
 |------|--------|---------|
 | cache\_storage\_account | claranet/storage-account/azurerm | ~> 7.14.0 |
-| diagnostics\_recovery\_vault | claranet/diagnostic-settings/azurerm | ~> 7.0.0 |
+| diagnostics\_recovery\_vault | claranet/diagnostic-settings/azurerm | ~> 8.0.0 |
 
 ## Resources
 
