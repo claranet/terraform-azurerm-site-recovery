@@ -38,12 +38,6 @@ variable "secondary_site_recovery_protection_container_custom_name" {
   default     = ""
 }
 
-variable "use_caf_naming" {
-  description = "Use the Azure CAF naming provider to generate default resource name. `custom_rg_name` override this if set. Legacy default name is used if this is set to `false`."
-  type        = bool
-  default     = true
-}
-
 variable "cache_storage_custom_name" {
   description = "Custom name for cache Storage Account."
   type        = string

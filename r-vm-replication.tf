@@ -21,7 +21,7 @@ resource "azurerm_site_recovery_replicated_vm" "vm_replication" {
     for_each = toset(each.value.managed_disks)
     content {
       disk_id                    = managed_disk.value.disk_id
-      staging_storage_account_id = module.cache_storage_account.storage_account_id
+      staging_storage_account_id = module.cache_storage_account.id
       target_resource_group_id   = each.value.target_resource_group_id
       target_disk_type           = managed_disk.value.disk_type
       target_replica_disk_type   = managed_disk.value.disk_type

@@ -27,3 +27,28 @@ output "secondary_fabric" {
   description = "Fabric of the replicated resources. Secondary region."
   value       = azurerm_site_recovery_fabric.secondary
 }
+
+output "primary_protection_container" {
+  description = "Protection containers of the replicated resources. Primary region."
+  value       = azurerm_site_recovery_protection_container.primary
+}
+
+output "secondary_protection_container" {
+  description = "Protection containers of the replicated resources. Secondary region."
+  value       = azurerm_site_recovery_protection_container.secondary
+}
+
+output "network_mapping" {
+  description = "Site recovery network mapping."
+  value       = azurerm_site_recovery_network_mapping.network_mapping
+}
+
+output "container_mapping" {
+  description = "Protection container mapping."
+  value       = azurerm_site_recovery_protection_container_mapping.container_mapping
+}
+
+output "module_diagnostics" {
+  description = "Diagnostics settings module outputs."
+  value       = module.diagnostics_recovery_vault
+}

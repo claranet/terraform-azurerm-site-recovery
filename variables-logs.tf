@@ -42,7 +42,7 @@ variable "cache_storage_account_logs_metrics_categories" {
   default     = null
 }
 
-variable "cache_storage_account_custom_diagnostic_settings_name" {
+variable "cache_storage_account_diagnostic_settings_custom_name" {
   description = "Custom name of the diagnostics settings of the cache storage account, name will be 'default' if not set."
   type        = string
   default     = "default"

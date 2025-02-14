@@ -39,61 +39,6 @@ More details about variables set by the `terraform-wrapper` available in the [do
 [Hashicorp Terraform](https://github.com/hashicorp/terraform/). Instead, we recommend to use [OpenTofu](https://github.com/opentofu/opentofu/).
 
 ```hcl
-module "rg" {
-  source  = "claranet/rg/azurerm"
-  version = "x.x.x"
-
-  client_name = var.client_name
-  location    = var.location
-  environment = var.environment
-  stack       = var.stack
-}
-
-module "primary_location" {
-  source  = "claranet/regions/azurerm"
-  version = "x.x.x"
-
-  azure_region = "fr-central"
-}
-
-module "secondary_location" {
-  source  = "claranet/regions/azurerm"
-  version = "x.x.x"
-
-  azure_region = "fr-south"
-}
-
-module "vnet" {
-  source  = "claranet/vnet/azurerm"
-  version = "x.x.x"
-
-  client_name = var.client_name
-  environment = var.environment
-  stack       = var.stack
-
-  resource_group_name = module.rg.resource_group_name
-
-  location       = module.secondary_location.location
-  location_short = module.secondary_location.location_short
-
-  vnet_cidr = ["172.16.2.0/24"]
-}
-
-module "subnet" {
-  source  = "claranet/subnet/azurerm"
-  version = "x.x.x"
-
-  client_name = var.client_name
-  environment = var.environment
-  stack       = var.stack
-
-  resource_group_name = module.rg.resource_group_name
-  location_short      = module.secondary_location.location_short
-
-  virtual_network_name = module.vnet.virtual_network_name
-  subnet_cidr_list     = ["172.16.2.0/24"]
-}
-
 data "azapi_resource" "vms_infos" {
   name      = "vm01"
   parent_id = "/subscriptions/xxxx-yyyyyy-aaaaaa-zzzzzzz-tttttttt/resourceGroups/rg-primary-region-vm01"
@@ -112,7 +57,7 @@ module "run" {
   environment    = var.environment
   stack          = var.stack
 
-  resource_group_name = module.rg.resource_group_name
+  resource_group_name = module.rg.name
 
   monitoring_function_splunk_token = "xxxxxx"
   monitoring_function_metrics_extra_dimensions = {
@@ -139,7 +84,7 @@ module "site_recovery" {
   stack       = var.stack
 
   location            = module.secondary_location.location
-  resource_group_name = module.rg.resource_group_name
+  resource_group_name = module.rg.name
 
   primary_location       = module.primary_location.location
   primary_location_short = module.primary_location.location_short
@@ -154,8 +99,8 @@ module "site_recovery" {
   replicated_vms = {
     vm01 = {
       vm_id                    = jsondecode(data.azapi_resource.vms_infos.output).id
-      target_resource_group_id = module.rg.resource_group_name
-      target_network_id        = module.subnet.subnet_id
+      target_resource_group_id = module.rg.name
+      target_network_id        = module.subnet.id
 
       managed_disks = [
         {
@@ -166,7 +111,7 @@ module "site_recovery" {
       network_interfaces = [
         {
           network_interface_id = jsondecode(data.azapi_resource.vms_infos.output).properties.networkProfile.networkInterfaces[0].id
-          target_subnet_name   = module.subnet.subnet_id
+          target_subnet_name   = module.subnet.id
           target_static_ip     = "172.16.2.10"
         }
       ]
@@ -184,9 +129,9 @@ module "site_recovery" {
 
 | Name | Version |
 |------|---------|
-| azapi | < 2.3 |
-| azurecaf | ~> 1.1 |
-| azurerm | ~> 3.114 |
+| azapi | ~> 1.0, < 1.13 |
+| azurecaf | ~> 1.2.28 |
+| azurerm | ~> 4.9 |
 
 ## Modules
 
@@ -219,7 +164,7 @@ module "site_recovery" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| cache\_storage\_account\_custom\_diagnostic\_settings\_name | Custom name of the diagnostics settings of the cache storage account, name will be 'default' if not set. | `string` | `"default"` | no |
+| cache\_storage\_account\_diagnostic\_settings\_custom\_name | Custom name of the diagnostics settings of the cache storage account, name will be 'default' if not set. | `string` | `"default"` | no |
 | cache\_storage\_account\_logs\_categories | Log categories to send to destinations. | `list(string)` | `null` | no |
 | cache\_storage\_account\_logs\_destinations\_ids | List of destination resources IDs for logs diagnostic destination for the cache Storage Account.<br/>Can be `Storage Account`, `Log Analytics Workspace` and `Event Hub`. No more than one of each can be set.<br/>If you want to specify an Azure EventHub to send logs and metrics to, you need to provide a formatted string with both the EventHub Namespace authorization send ID and the EventHub name (name of the queue to use in the Namespace) separated by the `|` character. | `list(string)` | `[]` | no |
 | cache\_storage\_account\_logs\_metrics\_categories | Metrics categories to send to destinations. | `list(string)` | `null` | no |
@@ -249,18 +194,22 @@ module "site_recovery" {
 | secondary\_site\_recovery\_fabric\_custom\_name | Custom name for Secondary Azure Site Recovery Fabric. | `string` | `""` | no |
 | secondary\_site\_recovery\_protection\_container\_custom\_name | Custom name for Secondary Azure Site Recovery Protection Container. | `string` | `""` | no |
 | stack | Project stack name. | `string` | n/a | yes |
-| use\_caf\_naming | Use the Azure CAF naming provider to generate default resource name. `custom_rg_name` override this if set. Legacy default name is used if this is set to `false`. | `bool` | `true` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | cache\_storage\_account | Cache Storage Account. |
+| container\_mapping | Protection container mapping. |
+| module\_diagnostics | Diagnostics settings module outputs. |
+| network\_mapping | Site recovery network mapping. |
 | primary\_fabric | Fabric of the source resources. Primary region. |
+| primary\_protection\_container | Protection containers of the replicated resources. Primary region. |
 | recovery\_vault | Azure Recovery Services Vault. |
 | replicated\_vms | Replicated virtual machines. |
 | replication\_policy | Replication policy. |
 | secondary\_fabric | Fabric of the replicated resources. Secondary region. |
+| secondary\_protection\_container | Protection containers of the replicated resources. Secondary region. |
 <!-- END_TF_DOCS -->
 ## Related documentation
 
