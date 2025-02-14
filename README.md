@@ -129,8 +129,8 @@ module "site_recovery" {
 
 | Name | Version |
 |------|---------|
-| azapi | ~> 1.0, < 1.13 |
-| azurecaf | ~> 1.2.28 |
+| azapi | ~> 2.0 |
+| azurecaf | ~> 1.2.29 |
 | azurerm | ~> 4.9 |
 
 ## Modules
@@ -144,15 +144,15 @@ module "site_recovery" {
 
 | Name | Type |
 |------|------|
-| [azurerm_recovery_services_vault.asr_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/recovery_services_vault) | resource |
+| [azurerm_recovery_services_vault.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/recovery_services_vault) | resource |
 | [azurerm_site_recovery_fabric.primary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_fabric) | resource |
 | [azurerm_site_recovery_fabric.secondary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_fabric) | resource |
-| [azurerm_site_recovery_network_mapping.network_mapping](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_network_mapping) | resource |
+| [azurerm_site_recovery_network_mapping.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_network_mapping) | resource |
 | [azurerm_site_recovery_protection_container.primary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_protection_container) | resource |
 | [azurerm_site_recovery_protection_container.secondary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_protection_container) | resource |
-| [azurerm_site_recovery_protection_container_mapping.container_mapping](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_protection_container_mapping) | resource |
-| [azurerm_site_recovery_replicated_vm.vm_replication](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_replicated_vm) | resource |
-| [azurerm_site_recovery_replication_policy.policy](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_replication_policy) | resource |
+| [azurerm_site_recovery_protection_container_mapping.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_protection_container_mapping) | resource |
+| [azurerm_site_recovery_replicated_vm.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_replicated_vm) | resource |
+| [azurerm_site_recovery_replication_policy.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_replication_policy) | resource |
 | [azapi_resource.nic_interfaces](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) | data source |
 | [azurecaf_name.primary_srf](https://registry.terraform.io/providers/claranet/azurecaf/latest/docs/data-sources/name) | data source |
 | [azurecaf_name.primary_srpc](https://registry.terraform.io/providers/claranet/azurecaf/latest/docs/data-sources/name) | data source |
@@ -164,21 +164,22 @@ module "site_recovery" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| cache\_storage\_account\_diagnostic\_settings\_custom\_name | Custom name of the diagnostics settings of the cache storage account, name will be 'default' if not set. | `string` | `"default"` | no |
-| cache\_storage\_account\_logs\_categories | Log categories to send to destinations. | `list(string)` | `null` | no |
-| cache\_storage\_account\_logs\_destinations\_ids | List of destination resources IDs for logs diagnostic destination for the cache Storage Account.<br/>Can be `Storage Account`, `Log Analytics Workspace` and `Event Hub`. No more than one of each can be set.<br/>If you want to specify an Azure EventHub to send logs and metrics to, you need to provide a formatted string with both the EventHub Namespace authorization send ID and the EventHub name (name of the queue to use in the Namespace) separated by the `|` character. | `list(string)` | `[]` | no |
-| cache\_storage\_account\_logs\_metrics\_categories | Metrics categories to send to destinations. | `list(string)` | `null` | no |
+| cache\_storage\_account\_logs\_destinations\_ids | List of destination resources IDs for logs diagnostic destination.<br/>Can be `Storage Account`, `Log Analytics Workspace` and `Event Hub`. No more than one of each can be set.<br/>If you want to use Azure EventHub as a destination, you must provide a formatted string containing both the EventHub Namespace authorization send ID and the EventHub name (name of the queue to use in the Namespace) separated by the <code>&#124;</code> character. | `list(string)` | `null` | no |
 | cache\_storage\_advanced\_threat\_protection\_enabled | Boolean flag which controls if advanced threat protection is enabled, see [documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-advanced-threat-protection?tabs=azure-portal) for more information. | `bool` | `true` | no |
 | cache\_storage\_allowed\_cidrs | List of public IPs allowed to access to the cache Storage Account. | `list(string)` | `[]` | no |
 | cache\_storage\_allowed\_subnet\_ids | List of subnet IDs allowed to access to the cache Storage Account. All subnets of replicated VMs are dynamically fetched. | `list(string)` | `[]` | no |
 | cache\_storage\_custom\_name | Custom name for cache Storage Account. | `string` | `null` | no |
 | cache\_storage\_resource\_group\_name | Resource Group name in which to deploy the cache Storage Account. | `string` | n/a | yes |
 | client\_name | Client name/account used in naming. | `string` | n/a | yes |
+| custom\_name | Custom name for Azure Recovery Vault. | `string` | `""` | no |
 | default\_tags\_enabled | Option to enable or disable default tags. | `bool` | `true` | no |
+| diagnostic\_settings\_custom\_name | Custom name of the diagnostics settings, name will be `default` if not set. | `string` | `"default"` | no |
 | environment | Project environment. | `string` | n/a | yes |
 | extra\_tags | Additional tags to associate with your Azure Storage Account. | `map(string)` | `{}` | no |
 | location | Azure region to use. | `string` | n/a | yes |
-| logs\_destinations\_ids | List of destination resources IDs for logs diagnostic destination.<br/>Can be `Storage Account`, `Log Analytics Workspace` and `Event Hub`. No more than one of each can be set.<br/>If you want to specify an Azure EventHub to send logs and metrics to, you need to provide a formatted string with both the EventHub Namespace authorization send ID and the EventHub name (name of the queue to use in the Namespace) separated by the `|` character. | `list(string)` | n/a | yes |
+| logs\_categories | Log categories to send to destinations. | `list(string)` | `null` | no |
+| logs\_destinations\_ids | List of destination resources IDs for logs diagnostic destination.<br/>Can be `Storage Account`, `Log Analytics Workspace` and `Event Hub`. No more than one of each can be set.<br/>If you want to use Azure EventHub as a destination, you must provide a formatted string containing both the EventHub Namespace authorization send ID and the EventHub name (name of the queue to use in the Namespace) separated by the <code>&#124;</code> character. | `list(string)` | n/a | yes |
+| logs\_metrics\_categories | Metrics categories to send to destinations. | `list(string)` | `null` | no |
 | name\_prefix | Optional prefix for the generated name. | `string` | `""` | no |
 | name\_suffix | Optional suffix for the generated name. | `string` | `""` | no |
 | network\_mapping | Virtual Network mapping as `{ "source VNet ID" => "destination VNet ID" }.` | `map(string)` | `{}` | no |
@@ -186,8 +187,7 @@ module "site_recovery" {
 | primary\_location\_short | Short name of the source location. | `string` | n/a | yes |
 | primary\_site\_recovery\_fabric\_custom\_name | Custom name for Primary Azure Site Recovery Fabric. | `string` | `""` | no |
 | primary\_site\_recovery\_protection\_container\_custom\_name | Custom name for Primary Azure Site Recovery Protection Container. | `string` | `""` | no |
-| recovery\_vault\_custom\_name | Custom name for Azure Recovery Vault. | `string` | `""` | no |
-| recovery\_vault\_logs\_destinations\_ids | List of destination resources IDs for logs diagnostic destination for the Recovery Vault.<br/>Can be `Storage Account`, `Log Analytics Workspace` and `Event Hub`. No more than one of each can be set.<br/>If you want to specify an Azure EventHub to send logs and metrics to, you need to provide a formatted string with both the EventHub Namespace authorization send ID and the EventHub name (name of the queue to use in the Namespace) separated by the `|` character. | `list(string)` | `[]` | no |
+| recovery\_vault\_logs\_destinations\_ids | List of destination resources IDs for logs diagnostic destination.<br/>Can be `Storage Account`, `Log Analytics Workspace` and `Event Hub`. No more than one of each can be set.<br/>If you want to use Azure EventHub as a destination, you must provide a formatted string containing both the EventHub Namespace authorization send ID and the EventHub name (name of the queue to use in the Namespace) separated by the <code>&#124;</code> character. | `list(string)` | `null` | no |
 | replicated\_vms | Map of VMs to replicate with Azure Site Recovery. VM Name is expected as a key. | <pre>map(<br/>    object({<br/>      vm_id                      = string<br/>      target_resource_group_id   = string<br/>      target_availability_set_id = optional(string, null)<br/>      target_zone                = optional(number, null)<br/>      target_network_id          = string<br/><br/>      managed_disks = list(object({<br/>        disk_id   = string<br/>        disk_type = string<br/>      }))<br/><br/>      network_interfaces = list(object({<br/>        network_interface_id          = string<br/>        target_subnet_name            = string<br/>        target_static_ip              = optional(string, null)<br/>        recovery_public_ip_address_id = optional(string, null)<br/>      }))<br/>  }))</pre> | n/a | yes |
 | replication\_policy | Site recovery replication policy. | <pre>object({<br/>    name                                                 = string<br/>    recovery_point_retention_in_minutes                  = optional(number, 1440) # 24h<br/>    application_consistent_snapshot_frequency_in_minutes = optional(number, 240)  # 4h<br/>  })</pre> | n/a | yes |
 | resource\_group\_name | Resource group name | `string` | n/a | yes |
@@ -201,13 +201,15 @@ module "site_recovery" {
 |------|-------------|
 | cache\_storage\_account | Cache Storage Account. |
 | container\_mapping | Protection container mapping. |
+| id | Azure Recovery Services Vault ID. |
 | module\_diagnostics | Diagnostics settings module outputs. |
+| name | Azure Recovery Services Vault name. |
 | network\_mapping | Site recovery network mapping. |
 | primary\_fabric | Fabric of the source resources. Primary region. |
 | primary\_protection\_container | Protection containers of the replicated resources. Primary region. |
-| recovery\_vault | Azure Recovery Services Vault. |
 | replicated\_vms | Replicated virtual machines. |
 | replication\_policy | Replication policy. |
+| resource | Azure Recovery Services Vault. |
 | secondary\_fabric | Fabric of the replicated resources. Secondary region. |
 | secondary\_protection\_container | Protection containers of the replicated resources. Secondary region. |
 <!-- END_TF_DOCS -->

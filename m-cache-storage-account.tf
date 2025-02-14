@@ -13,9 +13,9 @@ module "cache_storage_account" {
   location                        = var.primary_location
   location_short                  = var.primary_location_short
   logs_destinations_ids           = coalesce(var.cache_storage_account_logs_destinations_ids, var.logs_destinations_ids)
-  logs_categories                 = var.cache_storage_account_logs_categories
-  logs_metrics_categories         = var.cache_storage_account_logs_metrics_categories
-  diagnostic_settings_custom_name = var.cache_storage_account_diagnostic_settings_custom_name
+  logs_categories                 = var.logs_categories
+  logs_metrics_categories         = var.logs_metrics_categories
+  diagnostic_settings_custom_name = var.diagnostic_settings_custom_name
 
   account_tier             = "Standard"
   account_replication_type = "LRS"

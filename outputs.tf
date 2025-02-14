@@ -1,16 +1,26 @@
-output "recovery_vault" {
+output "resource" {
   description = "Azure Recovery Services Vault."
-  value       = azurerm_recovery_services_vault.asr_vault
+  value       = azurerm_recovery_services_vault.main
+}
+
+output "id" {
+  description = "Azure Recovery Services Vault ID."
+  value       = azurerm_recovery_services_vault.main.id
+}
+
+output "name" {
+  description = "Azure Recovery Services Vault name."
+  value       = azurerm_recovery_services_vault.main.name
 }
 
 output "replicated_vms" {
   description = "Replicated virtual machines."
-  value       = azurerm_site_recovery_replicated_vm.vm_replication
+  value       = azurerm_site_recovery_replicated_vm.main
 }
 
 output "replication_policy" {
   description = "Replication policy."
-  value       = azurerm_site_recovery_replication_policy.policy
+  value       = azurerm_site_recovery_replication_policy.main
 }
 
 output "cache_storage_account" {
@@ -40,12 +50,12 @@ output "secondary_protection_container" {
 
 output "network_mapping" {
   description = "Site recovery network mapping."
-  value       = azurerm_site_recovery_network_mapping.network_mapping
+  value       = azurerm_site_recovery_network_mapping.main
 }
 
 output "container_mapping" {
   description = "Protection container mapping."
-  value       = azurerm_site_recovery_protection_container_mapping.container_mapping
+  value       = azurerm_site_recovery_protection_container_mapping.main
 }
 
 output "module_diagnostics" {

@@ -6,11 +6,11 @@ terraform {
     }
     azurecaf = {
       source  = "claranet/azurecaf"
-      version = "~> 1.2.28"
+      version = "~> 1.2.29"
     }
     azapi = {
       source  = "azure/azapi"
-      version = "~> 1.0, < 1.13"
+      version = "~> 2.0"
     }
   }
 }

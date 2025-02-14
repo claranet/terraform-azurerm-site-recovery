@@ -9,7 +9,7 @@ variable "name_suffix" {
   type        = string
   default     = ""
 }
-variable "recovery_vault_custom_name" {
+variable "custom_name" {
   description = "Custom name for Azure Recovery Vault."
   type        = string
   default     = ""

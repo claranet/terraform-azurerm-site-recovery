@@ -1,7 +1,7 @@
-# variable "location" {
-#   description = "Azure region to use."
-#   type        = string
-# }
+variable "location" {
+  description = "Azure region to use."
+  type        = string
+}
 
 variable "client_name" {
   description = "Client name/account used in naming."

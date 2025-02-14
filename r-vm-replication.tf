@@ -1,9 +1,9 @@
-resource "azurerm_site_recovery_replicated_vm" "vm_replication" {
+resource "azurerm_site_recovery_replicated_vm" "main" {
   for_each = var.replicated_vms
 
   name                           = each.key
-  recovery_replication_policy_id = azurerm_site_recovery_replication_policy.policy.id
-  recovery_vault_name            = azurerm_recovery_services_vault.asr_vault.name
+  recovery_replication_policy_id = azurerm_site_recovery_replication_policy.main.id
+  recovery_vault_name            = azurerm_recovery_services_vault.main.name
   resource_group_name            = var.resource_group_name
 
   source_recovery_fabric_name               = azurerm_site_recovery_fabric.primary.name
@@ -40,8 +40,8 @@ resource "azurerm_site_recovery_replicated_vm" "vm_replication" {
   }
 
   depends_on = [
-    azurerm_site_recovery_network_mapping.network_mapping,
-    azurerm_site_recovery_replication_policy.policy
+    azurerm_site_recovery_network_mapping.main,
+    azurerm_site_recovery_replication_policy.main
   ]
 
   lifecycle {
@@ -50,4 +50,9 @@ resource "azurerm_site_recovery_replicated_vm" "vm_replication" {
       error_message = "You can't define target_availabity_set_id and target_zone."
     }
   }
+}
+
+moved {
+  from = azurerm_site_recovery_replicated_vm.vm_replication
+  to   = azurerm_site_recovery_replicated_vm.main
 }
