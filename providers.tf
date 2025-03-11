@@ -1,19 +1,16 @@
 terraform {
-  required_version = ">= 1.3"
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 4.0"
+      version = "~> 4.9"
     }
-
-    # tflint-ignore: terraform_unused_required_providers
+    azurecaf = {
+      source  = "claranet/azurecaf"
+      version = "~> 1.2.29"
+    }
     azapi = {
       source  = "azure/azapi"
       version = "~> 2.0"
     }
   }
-}
-
-provider "azurerm" {
-  features {}
 }

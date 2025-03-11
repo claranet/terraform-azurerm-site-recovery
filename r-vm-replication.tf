@@ -1,9 +1,9 @@
-resource "azurerm_site_recovery_replicated_vm" "vm_replication" {
+resource "azurerm_site_recovery_replicated_vm" "main" {
   for_each = var.replicated_vms
 
   name                           = each.key
-  recovery_replication_policy_id = azurerm_site_recovery_replication_policy.policy.id
-  recovery_vault_name            = azurerm_recovery_services_vault.asr_vault.name
+  recovery_replication_policy_id = azurerm_site_recovery_replication_policy.main.id
+  recovery_vault_name            = azurerm_recovery_services_vault.main.name
   resource_group_name            = var.resource_group_name
 
   source_recovery_fabric_name               = azurerm_site_recovery_fabric.primary.name
@@ -21,7 +21,7 @@ resource "azurerm_site_recovery_replicated_vm" "vm_replication" {
     for_each = toset(each.value.managed_disks)
     content {
       disk_id                    = managed_disk.value.disk_id
-      staging_storage_account_id = module.cache_storage_account.storage_account_id
+      staging_storage_account_id = module.cache_storage_account.id
       target_resource_group_id   = each.value.target_resource_group_id
       target_disk_type           = managed_disk.value.disk_type
       target_replica_disk_type   = managed_disk.value.disk_type
@@ -40,14 +40,19 @@ resource "azurerm_site_recovery_replicated_vm" "vm_replication" {
   }
 
   depends_on = [
-    azurerm_site_recovery_network_mapping.network_mapping,
-    azurerm_site_recovery_replication_policy.policy
+    azurerm_site_recovery_network_mapping.main,
+    azurerm_site_recovery_replication_policy.main,
   ]
 
   lifecycle {
     precondition {
       condition     = !alltrue([each.value.target_availability_set_id != null, each.value.target_zone != null])
-      error_message = "You can't define target_availabity_set_id and target_zone."
+      error_message = "You can't define `target_availabity_set_id` and `target_zone` at the same time."
     }
   }
+}
+
+moved {
+  from = azurerm_site_recovery_replicated_vm.vm_replication
+  to   = azurerm_site_recovery_replicated_vm.main
 }
