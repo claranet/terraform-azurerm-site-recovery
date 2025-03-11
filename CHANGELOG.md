@@ -1,3 +1,53 @@
+## 8.0.0 (2025-03-11)
+
+### ⚠ BREAKING CHANGES
+
+* **AZ-1088:** AzureRM Provider v4+ and OpenTofu 1.8+
+* **AZ-1088:** module v8 structure and updates
+
+### Features
+
+* **AZ-1088:** module v8 structure and updates cf178aa
+* **AZ-1088:** module v8 structure and updates 6793ca8
+
+### Bug Fixes
+
+* **AZ-1088:** fix example af07941
+* update example, locals, README be37654
+
+### Miscellaneous Chores
+
+* **deps:** update dependency claranet/diagnostic-settings/azurerm to v8 be7c111
+* **deps:** update dependency claranet/storage-account/azurerm to ~> 7.14.0 a2c3185
+* **deps:** update dependency claranet/storage-account/azurerm to v8 d6da31e
+* **deps:** update dependency opentofu to v1.8.3 29f78e6
+* **deps:** update dependency opentofu to v1.8.4 de51df9
+* **deps:** update dependency opentofu to v1.8.6 f27c477
+* **deps:** update dependency opentofu to v1.8.8 4eb6964
+* **deps:** update dependency opentofu to v1.9.0 7542504
+* **deps:** update dependency pre-commit to v4 249fc2c
+* **deps:** update dependency pre-commit to v4.0.1 a8b7e0a
+* **deps:** update dependency pre-commit to v4.1.0 c08f607
+* **deps:** update dependency tflint to v0.54.0 43554c7
+* **deps:** update dependency tflint to v0.55.0 88799e0
+* **deps:** update dependency trivy to v0.56.1 b68a94d
+* **deps:** update dependency trivy to v0.56.2 b5881cc
+* **deps:** update dependency trivy to v0.57.1 b7a0f24
+* **deps:** update dependency trivy to v0.58.1 750392c
+* **deps:** update dependency trivy to v0.58.2 59acf48
+* **deps:** update pre-commit hook alessandrojcm/commitlint-pre-commit-hook to v9.19.0 6df4903
+* **deps:** update pre-commit hook alessandrojcm/commitlint-pre-commit-hook to v9.20.0 0136eda
+* **deps:** update pre-commit hook pre-commit/pre-commit-hooks to v5 75824ae
+* **deps:** update pre-commit hook tofuutils/pre-commit-opentofu to v2.1.0 4cb98bd
+* **deps:** update terraform azapi to v2 e4c72c2
+* **deps:** update terraform claranet/diagnostic-settings/azurerm to v7 eb388c7
+* **deps:** update tools 96624e4
+* **deps:** update tools 50dc830
+* prepare for new examples structure 6bfe4b6
+* update examples structure 1e739c5
+* update Github templates a03e765
+* update tflint config for v0.55.0 4920f5c
+
 ## 7.1.0 (2024-10-03)
 
 ### Features
