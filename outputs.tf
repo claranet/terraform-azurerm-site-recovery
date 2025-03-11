@@ -60,5 +60,5 @@ output "container_mapping" {
 
 output "module_diagnostics" {
   description = "Diagnostics settings module outputs."
-  value       = module.diagnostics_recovery_vault
+  value       = module.diagnostics
 }

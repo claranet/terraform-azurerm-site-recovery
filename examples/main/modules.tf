@@ -50,27 +50,27 @@ module "site_recovery" {
 
   logs_destinations_ids = [
     module.run.log_analytics_workspace_id,
-    module.run.logs_storage_account_id
+    module.run.logs_storage_account_id,
   ]
 
   cache_storage_resource_group_name = "rg-cache-storage"
 
   replicated_vms = {
     vm01 = {
-      vm_id                    = jsondecode(data.azapi_resource.vms_infos.output).id
-      target_resource_group_id = module.rg.name
+      vm_id                    = data.azapi_resource.vms_infos.output.id
+      target_resource_group_id = module.rg.id
       target_network_id        = module.subnet.id
 
       managed_disks = [
         {
-          disk_id   = jsondecode(data.azapi_resource.vms_infos.output).properties.storageProfile.osDisk.managedDisk.id
-          disk_type = jsondecode(data.azapi_resource.vms_infos.output).properties.storageProfile.osDisk.managedDisk.storageAccountType
+          disk_id   = data.azapi_resource.vms_infos.output.properties.storageProfile.osDisk.managedDisk.id
+          disk_type = data.azapi_resource.vms_infos.output.properties.storageProfile.osDisk.managedDisk.storageAccountType
         }
       ]
       network_interfaces = [
         {
-          network_interface_id = jsondecode(data.azapi_resource.vms_infos.output).properties.networkProfile.networkInterfaces[0].id
-          target_subnet_name   = module.subnet.id
+          network_interface_id = data.azapi_resource.vms_infos.output.properties.networkProfile.networkInterfaces[0].id
+          target_subnet_name   = module.subnet.name
           target_static_ip     = "172.16.2.10"
         }
       ]

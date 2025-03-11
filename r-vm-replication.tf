@@ -41,13 +41,13 @@ resource "azurerm_site_recovery_replicated_vm" "main" {
 
   depends_on = [
     azurerm_site_recovery_network_mapping.main,
-    azurerm_site_recovery_replication_policy.main
+    azurerm_site_recovery_replication_policy.main,
   ]
 
   lifecycle {
     precondition {
       condition     = !alltrue([each.value.target_availability_set_id != null, each.value.target_zone != null])
-      error_message = "You can't define target_availabity_set_id and target_zone."
+      error_message = "You can't define `target_availabity_set_id` and `target_zone` at the same time."
     }
   }
 }
