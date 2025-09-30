@@ -130,7 +130,7 @@ module "site_recovery" {
 | Name | Version |
 |------|---------|
 | azapi | ~> 2.0 |
-| azurecaf | ~> 1.2.29 |
+| azurecaf | >= 1.2.28 |
 | azurerm | ~> 4.9 |
 
 ## Modules
