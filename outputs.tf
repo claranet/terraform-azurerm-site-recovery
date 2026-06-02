@@ -1,6 +1,7 @@
 output "resource" {
   description = "Azure Recovery Services Vault."
   value       = azurerm_recovery_services_vault.main
+  sensitive   = true
 }
 
 output "id" {
