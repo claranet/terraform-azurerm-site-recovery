@@ -70,8 +70,10 @@ module "site_recovery" {
       network_interfaces = [
         {
           network_interface_id = data.azapi_resource.vms_infos.output.properties.networkProfile.networkInterfaces[0].id
-          target_subnet_name   = module.subnet.name
-          target_static_ip     = "172.16.2.10"
+          # Must match the IP configuration name of the NIC on the source VM.
+          ip_configuration_name = "ipconfig1"
+          target_subnet_name    = module.subnet.name
+          target_static_ip      = "172.16.2.10"
         }
       ]
     }
