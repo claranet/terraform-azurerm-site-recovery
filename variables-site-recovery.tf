@@ -55,6 +55,7 @@ variable "replicated_vms" {
 
       network_interfaces = list(object({
         network_interface_id          = string
+        ip_configuration_name         = string
         target_subnet_name            = string
         target_static_ip              = optional(string, null)
         recovery_public_ip_address_id = optional(string, null)

@@ -112,8 +112,10 @@ module "site_recovery" {
       network_interfaces = [
         {
           network_interface_id = data.azapi_resource.vms_infos.output.properties.networkProfile.networkInterfaces[0].id
-          target_subnet_name   = module.subnet.name
-          target_static_ip     = "172.16.2.10"
+          # Must match the IP configuration name of the NIC on the source VM.
+          ip_configuration_name = "ipconfig1"
+          target_subnet_name    = module.subnet.name
+          target_static_ip      = "172.16.2.10"
         }
       ]
     }
@@ -131,15 +133,15 @@ module "site_recovery" {
 | Name | Version |
 | ---- | ------- |
 | azapi | ~> 2.0 |
-| azurecaf | >= 1.2.28 |
-| azurerm | ~> 4.9 |
+| azurecaf | ~> 1.3.0 |
+| azurerm | ~> 5.0 |
 
 ## Modules
 
 | Name | Source | Version |
 | ---- | ------ | ------- |
-| cache\_storage\_account | claranet/storage-account/azurerm | ~> 8.6.0 |
-| diagnostics | claranet/diagnostic-settings/azurerm | ~> 8.2.0 |
+| cache\_storage\_account | claranet/storage-account/azurerm | ~> 9.0 |
+| diagnostics | claranet/diagnostic-settings/azurerm | ~> 9.0 |
 
 ## Resources
 
@@ -189,7 +191,7 @@ module "site_recovery" {
 | primary\_site\_recovery\_fabric\_custom\_name | Custom name for Primary Azure Site Recovery Fabric. | `string` | `""` | no |
 | primary\_site\_recovery\_protection\_container\_custom\_name | Custom name for Primary Azure Site Recovery Protection Container. | `string` | `""` | no |
 | recovery\_vault\_logs\_destinations\_ids | List of destination resources IDs for logs diagnostic destination.<br/>Can be `Storage Account`, `Log Analytics Workspace` and `Event Hub`. No more than one of each can be set.<br/>If you want to use Azure EventHub as a destination, you must provide a formatted string containing both the EventHub Namespace authorization send ID and the EventHub name (name of the queue to use in the Namespace) separated by the <code>&#124;</code> character. | `list(string)` | `null` | no |
-| replicated\_vms | Map of VMs to replicate with Azure Site Recovery. VM Name is expected as a key. | <pre>map(<br/>    object({<br/>      vm_id                      = string<br/>      target_resource_group_id   = string<br/>      target_availability_set_id = optional(string, null)<br/>      target_zone                = optional(number, null)<br/>      target_network_id          = string<br/><br/>      managed_disks = list(object({<br/>        disk_id   = string<br/>        disk_type = string<br/>      }))<br/><br/>      network_interfaces = list(object({<br/>        network_interface_id          = string<br/>        target_subnet_name            = string<br/>        target_static_ip              = optional(string, null)<br/>        recovery_public_ip_address_id = optional(string, null)<br/>      }))<br/>  }))</pre> | n/a | yes |
+| replicated\_vms | Map of VMs to replicate with Azure Site Recovery. VM Name is expected as a key. | <pre>map(<br/>    object({<br/>      vm_id                      = string<br/>      target_resource_group_id   = string<br/>      target_availability_set_id = optional(string, null)<br/>      target_zone                = optional(number, null)<br/>      target_network_id          = string<br/><br/>      managed_disks = list(object({<br/>        disk_id   = string<br/>        disk_type = string<br/>      }))<br/><br/>      network_interfaces = list(object({<br/>        network_interface_id          = string<br/>        ip_configuration_name         = string<br/>        target_subnet_name            = string<br/>        target_static_ip              = optional(string, null)<br/>        recovery_public_ip_address_id = optional(string, null)<br/>      }))<br/>  }))</pre> | n/a | yes |
 | replication\_policy | Site recovery replication policy. | <pre>object({<br/>    name                                                 = string<br/>    recovery_point_retention_in_minutes                  = optional(number, 1440) # 24h<br/>    application_consistent_snapshot_frequency_in_minutes = optional(number, 240)  # 4h<br/>  })</pre> | n/a | yes |
 | resource\_group\_name | Resource group name. | `string` | n/a | yes |
 | secondary\_site\_recovery\_fabric\_custom\_name | Custom name for Secondary Azure Site Recovery Fabric. | `string` | `""` | no |

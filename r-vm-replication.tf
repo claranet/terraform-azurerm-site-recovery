@@ -31,11 +31,16 @@ resource "azurerm_site_recovery_replicated_vm" "main" {
   dynamic "network_interface" {
     for_each = toset(each.value.network_interfaces)
     content {
-      source_network_interface_id   = network_interface.value.network_interface_id
-      target_subnet_name            = network_interface.value.target_subnet_name
-      target_static_ip              = network_interface.value.target_static_ip
-      recovery_public_ip_address_id = network_interface.value.recovery_public_ip_address_id
+      source_network_interface_id = network_interface.value.network_interface_id
 
+      # AzureRM 5.0 moved the per-NIC targets into a nested `ip_configuration` block. Its `name`
+      # must match the IP configuration name of the NIC on the source VM, so it has to be supplied.
+      ip_configuration {
+        name                          = network_interface.value.ip_configuration_name
+        target_subnet_name            = network_interface.value.target_subnet_name
+        target_static_ip              = network_interface.value.target_static_ip
+        recovery_public_ip_address_id = network_interface.value.recovery_public_ip_address_id
+      }
     }
   }
 
