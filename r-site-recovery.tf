@@ -13,8 +13,9 @@ moved {
 }
 
 # AzureRM 5.0 removed `soft_delete_enabled` from `azurerm_recovery_services_vault`.
+# `AlwaysON` is irreversible: Azure rejects any downgrade to `Enabled` or `Disabled`.
 resource "azapi_update_resource" "vault_soft_delete" {
-  count = var.vault_soft_delete_enabled != null ? 1 : 0
+  count = var.vault_soft_delete_state != null ? 1 : 0
 
   type        = "Microsoft.RecoveryServices/vaults@2024-04-01"
   resource_id = azurerm_recovery_services_vault.main.id
@@ -23,7 +24,7 @@ resource "azapi_update_resource" "vault_soft_delete" {
     properties = {
       securitySettings = {
         softDeleteSettings = {
-          softDeleteState = var.vault_soft_delete_enabled ? "Enabled" : "Disabled"
+          softDeleteState = var.vault_soft_delete_state
         }
       }
     }

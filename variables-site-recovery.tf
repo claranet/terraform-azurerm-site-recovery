@@ -88,10 +88,16 @@ variable "container_mapping_automatic_update" {
   default = null
 }
 
-variable "vault_soft_delete_enabled" {
-  description = "Whether soft delete is enabled on the Recovery Services Vault. AzureRM 5.0 no longer manages it, so it is set through AzAPI. Left unmanaged when `null`."
-  type        = bool
+variable "vault_soft_delete_state" {
+  description = "Soft delete state of the Recovery Services Vault, one of `Enabled`, `Disabled` or `AlwaysON`. AzureRM 5.0 no longer manages it, so it is set through AzAPI. Left unmanaged when `null`. `AlwaysON` is irreversible: once set, Azure no longer allows to disable soft delete."
+  type        = string
   default     = null
+  nullable    = true
+
+  validation {
+    condition     = var.vault_soft_delete_state == null || contains(["Enabled", "Disabled", "AlwaysON"], coalesce(var.vault_soft_delete_state, "Enabled"))
+    error_message = "`var.vault_soft_delete_state` must be `null`, `Enabled`, `Disabled` or `AlwaysON`."
+  }
 }
 
 variable "replication_policy" {

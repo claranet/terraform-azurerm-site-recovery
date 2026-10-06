@@ -201,7 +201,7 @@ module "site_recovery" {
 | secondary\_site\_recovery\_fabric\_custom\_name | Custom name for Secondary Azure Site Recovery Fabric. | `string` | `""` | no |
 | secondary\_site\_recovery\_protection\_container\_custom\_name | Custom name for Secondary Azure Site Recovery Protection Container. | `string` | `""` | no |
 | stack | Project stack name. | `string` | n/a | yes |
-| vault\_soft\_delete\_enabled | Whether soft delete is enabled on the Recovery Services Vault. AzureRM 5.0 no longer manages it, so it is set through AzAPI. Left unmanaged when `null`. | `bool` | `null` | no |
+| vault\_soft\_delete\_state | Soft delete state of the Recovery Services Vault, one of `Enabled`, `Disabled` or `AlwaysON`. AzureRM 5.0 no longer manages it, so it is set through AzAPI. Left unmanaged when `null`. `AlwaysON` is irreversible: once set, Azure no longer allows to disable soft delete. | `string` | `null` | no |
 
 ## Outputs
 
