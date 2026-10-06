@@ -51,6 +51,8 @@ variable "replicated_vms" {
       managed_disks = list(object({
         disk_id   = string
         disk_type = string
+        # Overrides the module cache Storage Account, e.g. to keep the cache account already used by an existing replication (changing it forces a re-protection).
+        staging_storage_account_id = optional(string)
       }))
 
       network_interfaces = list(object({
@@ -61,6 +63,21 @@ variable "replicated_vms" {
         recovery_public_ip_address_id = optional(string, null)
       }))
   }))
+}
+
+variable "container_mapping_automatic_update" {
+  description = "Automatic update of the Site Recovery extension (Mobility service) on the replicated VMs, through an Automation Account. Disabled when `null`."
+  type = object({
+    automation_account_id = string
+    authentication_type   = optional(string, "SystemAssignedIdentity")
+  })
+  default = null
+}
+
+variable "vault_soft_delete_enabled" {
+  description = "Whether soft delete is enabled on the Recovery Services Vault. AzureRM 5.0 no longer manages it, so it is set through AzAPI. Left unmanaged when `null`."
+  type        = bool
+  default     = null
 }
 
 variable "replication_policy" {

@@ -147,6 +147,7 @@ module "site_recovery" {
 
 | Name | Type |
 | ---- | ---- |
+| [azapi_update_resource.vault_soft_delete](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/update_resource) | resource |
 | [azurerm_recovery_services_vault.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/recovery_services_vault) | resource |
 | [azurerm_site_recovery_fabric.primary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_fabric) | resource |
 | [azurerm_site_recovery_fabric.secondary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/site_recovery_fabric) | resource |
@@ -174,6 +175,7 @@ module "site_recovery" {
 | cache\_storage\_custom\_name | Custom name for cache Storage Account. | `string` | `null` | no |
 | cache\_storage\_resource\_group\_name | Resource Group name in which to deploy the cache Storage Account. | `string` | n/a | yes |
 | client\_name | Client name/account used in naming. | `string` | n/a | yes |
+| container\_mapping\_automatic\_update | Automatic update of the Site Recovery extension (Mobility service) on the replicated VMs, through an Automation Account. Disabled when `null`. | <pre>object({<br/>    automation_account_id = string<br/>    authentication_type   = optional(string, "SystemAssignedIdentity")<br/>  })</pre> | `null` | no |
 | custom\_name | Custom name for Azure Recovery Vault. | `string` | `""` | no |
 | default\_tags\_enabled | Option to enable or disable default tags. | `bool` | `true` | no |
 | diagnostic\_settings\_custom\_name | Custom name of the diagnostics settings, name will be `default` if not set. | `string` | `"default"` | no |
@@ -191,12 +193,13 @@ module "site_recovery" {
 | primary\_site\_recovery\_fabric\_custom\_name | Custom name for Primary Azure Site Recovery Fabric. | `string` | `""` | no |
 | primary\_site\_recovery\_protection\_container\_custom\_name | Custom name for Primary Azure Site Recovery Protection Container. | `string` | `""` | no |
 | recovery\_vault\_logs\_destinations\_ids | List of destination resources IDs for logs diagnostic destination.<br/>Can be `Storage Account`, `Log Analytics Workspace` and `Event Hub`. No more than one of each can be set.<br/>If you want to use Azure EventHub as a destination, you must provide a formatted string containing both the EventHub Namespace authorization send ID and the EventHub name (name of the queue to use in the Namespace) separated by the <code>&#124;</code> character. | `list(string)` | `null` | no |
-| replicated\_vms | Map of VMs to replicate with Azure Site Recovery. VM Name is expected as a key. | <pre>map(<br/>    object({<br/>      vm_id                      = string<br/>      target_resource_group_id   = string<br/>      target_availability_set_id = optional(string, null)<br/>      target_zone                = optional(number, null)<br/>      target_network_id          = string<br/><br/>      managed_disks = list(object({<br/>        disk_id   = string<br/>        disk_type = string<br/>      }))<br/><br/>      network_interfaces = list(object({<br/>        network_interface_id          = string<br/>        ip_configuration_name         = string<br/>        target_subnet_name            = string<br/>        target_static_ip              = optional(string, null)<br/>        recovery_public_ip_address_id = optional(string, null)<br/>      }))<br/>  }))</pre> | n/a | yes |
+| replicated\_vms | Map of VMs to replicate with Azure Site Recovery. VM Name is expected as a key. | <pre>map(<br/>    object({<br/>      vm_id                      = string<br/>      target_resource_group_id   = string<br/>      target_availability_set_id = optional(string, null)<br/>      target_zone                = optional(number, null)<br/>      target_network_id          = string<br/><br/>      managed_disks = list(object({<br/>        disk_id   = string<br/>        disk_type = string<br/>        # Overrides the module cache Storage Account, e.g. to keep the cache account already used by an existing replication (changing it forces a re-protection).<br/>        staging_storage_account_id = optional(string)<br/>      }))<br/><br/>      network_interfaces = list(object({<br/>        network_interface_id          = string<br/>        ip_configuration_name         = string<br/>        target_subnet_name            = string<br/>        target_static_ip              = optional(string, null)<br/>        recovery_public_ip_address_id = optional(string, null)<br/>      }))<br/>  }))</pre> | n/a | yes |
 | replication\_policy | Site recovery replication policy. | <pre>object({<br/>    name                                                 = string<br/>    recovery_point_retention_in_minutes                  = optional(number, 1440) # 24h<br/>    application_consistent_snapshot_frequency_in_minutes = optional(number, 240)  # 4h<br/>  })</pre> | n/a | yes |
 | resource\_group\_name | Resource group name. | `string` | n/a | yes |
 | secondary\_site\_recovery\_fabric\_custom\_name | Custom name for Secondary Azure Site Recovery Fabric. | `string` | `""` | no |
 | secondary\_site\_recovery\_protection\_container\_custom\_name | Custom name for Secondary Azure Site Recovery Protection Container. | `string` | `""` | no |
 | stack | Project stack name. | `string` | n/a | yes |
+| vault\_soft\_delete\_enabled | Whether soft delete is enabled on the Recovery Services Vault. AzureRM 5.0 no longer manages it, so it is set through AzAPI. Left unmanaged when `null`. | `bool` | `null` | no |
 
 ## Outputs
 
