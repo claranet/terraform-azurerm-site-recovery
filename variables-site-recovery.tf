@@ -38,6 +38,20 @@ variable "cache_storage_advanced_threat_protection_enabled" {
   nullable    = false
 }
 
+variable "cache_storage_shared_access_key_enabled" {
+  description = "Whether the cache Storage Account permits requests to be authorized with the account access key via Shared Key."
+  type        = bool
+  default     = false
+  nullable    = false
+}
+
+variable "cache_storage_cross_tenant_replication_enabled" {
+  description = "Whether cross tenant replication is enabled on the cache Storage Account."
+  type        = bool
+  default     = false
+  nullable    = false
+}
+
 variable "replicated_vms" {
   description = "Map of VMs to replicate with Azure Site Recovery. VM Name is expected as a key."
   type = map(

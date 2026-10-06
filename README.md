@@ -172,8 +172,10 @@ module "site_recovery" {
 | cache\_storage\_advanced\_threat\_protection\_enabled | Boolean flag which controls if advanced threat protection is enabled, see [documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-advanced-threat-protection?tabs=azure-portal) for more information. | `bool` | `true` | no |
 | cache\_storage\_allowed\_cidrs | List of public IPs allowed to access to the cache Storage Account. | `list(string)` | `[]` | no |
 | cache\_storage\_allowed\_subnet\_ids | List of subnet IDs allowed to access to the cache Storage Account. All subnets of replicated VMs are dynamically fetched. | `list(string)` | `[]` | no |
+| cache\_storage\_cross\_tenant\_replication\_enabled | Whether cross tenant replication is enabled on the cache Storage Account. | `bool` | `false` | no |
 | cache\_storage\_custom\_name | Custom name for cache Storage Account. | `string` | `null` | no |
 | cache\_storage\_resource\_group\_name | Resource Group name in which to deploy the cache Storage Account. | `string` | n/a | yes |
+| cache\_storage\_shared\_access\_key\_enabled | Whether the cache Storage Account permits requests to be authorized with the account access key via Shared Key. | `bool` | `false` | no |
 | client\_name | Client name/account used in naming. | `string` | n/a | yes |
 | container\_mapping\_automatic\_update | Automatic update of the Site Recovery extension (Mobility service) on the replicated VMs, through an Automation Account. Disabled when `null`. | <pre>object({<br/>    automation_account_id = string<br/>    authentication_type   = optional(string, "SystemAssignedIdentity")<br/>  })</pre> | `null` | no |
 | custom\_name | Custom name for Azure Recovery Vault. | `string` | `""` | no |
