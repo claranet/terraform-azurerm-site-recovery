@@ -27,7 +27,16 @@ module "cache_storage_account" {
 
   advanced_threat_protection_enabled = var.cache_storage_advanced_threat_protection_enabled
 
+  shared_access_key_enabled        = var.cache_storage_shared_access_key_enabled
+  cross_tenant_replication_enabled = var.cache_storage_cross_tenant_replication_enabled
+
   #  subnet_ids    = var.cache_storage_allowed_subnet_ids
   subnet_ids    = toset(concat(local.src_subnets, var.cache_storage_allowed_subnet_ids))
   allowed_cidrs = var.cache_storage_allowed_cidrs
+}
+
+# storage-account renamed `threat_protection` to `main` without a `moved` block (its own block then moves `main` to `main[0]`).
+moved {
+  from = module.cache_storage_account.azurerm_advanced_threat_protection.threat_protection
+  to   = module.cache_storage_account.azurerm_advanced_threat_protection.main
 }

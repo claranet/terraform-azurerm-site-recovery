@@ -38,6 +38,20 @@ variable "cache_storage_advanced_threat_protection_enabled" {
   nullable    = false
 }
 
+variable "cache_storage_shared_access_key_enabled" {
+  description = "Whether the cache Storage Account permits requests to be authorized with the account access key via Shared Key."
+  type        = bool
+  default     = false
+  nullable    = false
+}
+
+variable "cache_storage_cross_tenant_replication_enabled" {
+  description = "Whether cross tenant replication is enabled on the cache Storage Account."
+  type        = bool
+  default     = false
+  nullable    = false
+}
+
 variable "replicated_vms" {
   description = "Map of VMs to replicate with Azure Site Recovery. VM Name is expected as a key."
   type = map(
@@ -51,6 +65,8 @@ variable "replicated_vms" {
       managed_disks = list(object({
         disk_id   = string
         disk_type = string
+        # Overrides the module cache Storage Account, e.g. to keep the cache account already used by an existing replication (changing it forces a re-protection).
+        staging_storage_account_id = optional(string)
       }))
 
       network_interfaces = list(object({
@@ -61,6 +77,27 @@ variable "replicated_vms" {
         recovery_public_ip_address_id = optional(string, null)
       }))
   }))
+}
+
+variable "container_mapping_automatic_update" {
+  description = "Automatic update of the Site Recovery extension (Mobility service) on the replicated VMs, through an Automation Account. Disabled when `null`."
+  type = object({
+    automation_account_id = string
+    authentication_type   = optional(string, "SystemAssignedIdentity")
+  })
+  default = null
+}
+
+variable "vault_soft_delete_state" {
+  description = "Soft delete state of the Recovery Services Vault, one of `Enabled`, `Disabled` or `AlwaysON`. AzureRM 5.0 no longer manages it, so it is set through AzAPI. Left unmanaged when `null`. `AlwaysON` is irreversible: once set, Azure no longer allows to disable soft delete."
+  type        = string
+  default     = null
+  nullable    = true
+
+  validation {
+    condition     = var.vault_soft_delete_state == null || contains(["Enabled", "Disabled", "AlwaysON"], coalesce(var.vault_soft_delete_state, "Enabled"))
+    error_message = "`var.vault_soft_delete_state` must be `null`, `Enabled`, `Disabled` or `AlwaysON`."
+  }
 }
 
 variable "replication_policy" {
