@@ -1,3 +1,27 @@
+## 9.1.0 (2026-11-20)
+
+### Features
+
+* **AZ-1697:** ✨ add inputs to keep existing ASR replications on AzureRM 5 2eaceec
+* **AZ-1697:** ✨ expose cache Storage Account shared key and cross-tenant replication 909e7ea
+* **AZ-1697:** ✨ support `AlwaysON` vault soft delete state 7682345
+
+### Continuous Integration
+
+* **release:** drop semantic-release-slack-bot, the receiver posts releases 449ecd7
+
+### Miscellaneous Chores
+
+* **deps:** ⬆️ update tools 🔗 d12b9b4
+* **deps:** update dependency opentofu to v1.13.0 20d8293
+* **deps:** update dependency opentofu to v1.13.1 eaec8a1
+* **deps:** update dependency opentofu to v1.13.2 35c148f
+* **deps:** update dependency opentofu to v1.13.9 5bee384
+* **deps:** update dependency terraform-docs to v0.25.1 1b53084
+* **deps:** update dependency tflint to v0.65.0 004ddf6
+* **deps:** update dependency tflint to v0.66.0 d9c5606
+* **deps:** update pre-commit hook crate-ci/committed to v1.1.12 90cbf07
+
 ## 9.0.0 (2026-08-25)
 
 ### ⚠ BREAKING CHANGES
